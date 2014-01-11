@@ -6,6 +6,40 @@ public class s_rmifs_stub
 	extends UnicastRemoteObject
 	implements c_s_services
 {
+	/**
+	 * Clase para los 20 ultimos comandos del servidor
+	 **/
+	private class s_log
+	{
+		private String[] log;
+		private int counter;
+		public s_log()
+		{
+			log = new String[20];
+			for (int i = 0; i < 20; ++i)
+				log[i] = "";
+			counter = 0;
+		}
+
+		public void add_log(String cmd)
+		{
+			log[counter] = cmd;
+			counter = (counter + 1) % 20;
+		}
+
+		public void print_log()
+		{
+			int tmp = counter + 1;
+			while (tmp != counter)
+			{
+				--counter;
+				if (counter < 0)
+					counter = counter + 20;
+				if (!log[counter].equals(""))
+					System.out.println(log[counter]);
+			}
+		}
+	}
 
 	private class archivo
 	{
@@ -13,11 +47,13 @@ public class s_rmifs_stub
 		final private String owner;
 		File file;
 
+		// Para un nuevo archivo
 		archivo(String f_name, String owner, File file)
 		{
 			this.f_name = f_name;
 			this.owner = owner;
 			this.file = file;
+			// Crear el archivo de ownership
 		}
 
 		archivo(String f_name)
@@ -38,43 +74,44 @@ public class s_rmifs_stub
 		}
 	}
 
-	public s_rmifs_stub()
+	public s_rmifs_stub(String rmi_host, int rmi_port)
 		throws RemoteException
 	{
+		// Hacer la conexion a servidor de autenticacion
 		super();
 	}
 
-	public String iniciarSesion(String nombre, String clave)
+	public String init(String nombre, String clave)
 		throws RemoteException
 	{
 		return "Bienvenido " + nombre + ". Usted esta conectado al servidor.\n";
 	}
-	public String cerrarSesion(String nombre, String clave)
+	public String close(String nombre, String clave)
 		throws RemoteException
 	{
 		return "Cerrando sesion.\n";
 	}
 
-	public String listarArchivosEnServidor(String nombre, String clave)
+	public String rls(String nombre, String clave)
 		throws RemoteException
 	{
 		return "Listando archivos en el servidor.\n";
 	}
 
-	public String subirArchivo(String nombre, String clave)
-	throws RemoteException
+	public String sub(String archivo, String nombre, String clave)
+		throws RemoteException
 	{
 		return "Subiendo archivo al servidor.\n";
 	}
 
-	public String bajarArchivo(String nombre, String clave)
+	public String baj(String archivo, String nombre, String clave)
 	throws RemoteException
 	{
 		return "Bajando archivo desde el servidor.\n";
 	}
 
-	public String borrarArchivo(String nombre, String clave)
-	throws RemoteException
+	public String bor(String archivo, String nombre, String clave)
+		throws RemoteException
 	{
 		return "Borrando archivo en el servidor.\n";
 	}

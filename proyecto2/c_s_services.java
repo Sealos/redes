@@ -2,21 +2,21 @@ import java.rmi.Remote;
 
 public interface c_s_services extends Remote
 {
-	public String iniciarSesion(String nombre, String clave)
+	public String init(String nombre, String clave)
 		throws java.rmi.RemoteException;
 
-	public String cerrarSesion(String nombre, String clave)
+	public String close(String nombre, String clave)
 		throws java.rmi.RemoteException;
 
-	public String listarArchivosEnServidor(String nombre, String clave)
+	public String rls(String nombre, String clave)
 		throws java.rmi.RemoteException;
 
-	public String subirArchivo(String nombre, String clave)
+	public String sub(String archivo, String nombre, String clave)
 		throws java.rmi.RemoteException;
 
-	public String bajarArchivo(String nombre, String clave)
+	public String baj(String archivo, String nombre, String clave)
 		throws java.rmi.RemoteException;
 
-	public String borrarArchivo(String nombre, String clave)
+	public String bor(String archivo, String nombre, String clave)
 		throws java.rmi.RemoteException;
 }
