@@ -152,7 +152,7 @@ public class hash<E>
 		{
 			if (clone[i] != null)
 			{
-				Cola<E> cl = new Cola<E>(clone[i]);
+				cola<E> cl = new cola<E>(clone[i]);
 				E temp;
 				while((temp = cl.pop()) != null)
 				{
