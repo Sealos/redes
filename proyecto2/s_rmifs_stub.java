@@ -1,5 +1,7 @@
+import java.net.MalformedURLException;
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.io.*;
 
@@ -32,7 +34,6 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 
 		public void print_log()
 		{
-			int tmp = counter + 1;
 			int j = 1;
 			for (int i = 0; i != counter; i = (i + 1) % 20)
 			{
@@ -52,15 +53,13 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 	{
 		final private String f_name;
 		final private String owner;
-		File file;
 
 		// Para un nuevo archivo
-		archivo(String f_name, String owner, File file)
+		archivo(String f_name, String owner, byte[] file)
 		{
 			this.f_name = f_name;
 			this.owner = owner;
-			this.file = file;
-			// Crear el archivo de ownership
+			byte_to_file(file, f_name);
 			write_ownership(owner, f_name);
 		}
 
@@ -68,6 +67,35 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 		{
 			this.f_name = f_name;
 			this.owner = get_ownership(f_name);
+		}
+
+		public void delete()
+		{
+			File file = new File("./" + f_name + ".own");
+			file.delete();
+			file = new File("./" + f_name);
+			file.delete();
+		}
+
+		// TODO verificar si ya existe el archivo
+		private void byte_to_file(byte[] file, String f_name)
+		{
+			try
+			{
+				BufferedOutputStream fs = new BufferedOutputStream(new FileOutputStream((new File(f_name)).getName()));
+
+				fs.write(file, 0, file.length);
+				fs.flush();
+				fs.close();
+			}
+			catch (FileNotFoundException e)
+			{
+				e.printStackTrace();
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
 		}
 
 		private void write_ownership(String owner, String f_name)
@@ -91,7 +119,36 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 			}
 		}
 
-		private String get_ownership(String f_name)
+		final private byte[] file_to_byte(String f_name)
+		{
+			try
+			{
+				File archivo = new File(f_name);
+				byte buffer[] = new byte[(int) archivo.length()];
+				BufferedInputStream br = new BufferedInputStream(new FileInputStream(f_name));
+				br.read(buffer, 0, buffer.length);
+				br.close();
+				return buffer;
+			}
+			catch (FileNotFoundException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (IOException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		public byte[] file_to_byte()
+		{
+			return file_to_byte(f_name);
+		}
+
+		final private String get_ownership(String f_name)
 		{
 			BufferedReader br = null;
 			try
@@ -102,9 +159,7 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 			}
 			catch (FileNotFoundException e)
 			{
-				System.out
-						.println("No se encontro el archivo de ownership para "
-								+ f_name);
+				System.out.println("No se encontro el archivo de ownership para " + f_name);
 			}
 			catch (IOException e)
 			{
@@ -125,9 +180,9 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 			return null;
 		}
 
-		public File get_file()
+		public String get_ownership()
 		{
-			return file;
+			return get_ownership(f_name);
 		}
 
 		public String get_owner()
@@ -141,24 +196,45 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 	public s_rmifs_stub(String rmi_host, int rmi_port) throws RemoteException
 	{
 		super();
+
 		try
 		{
-			remote = (s_a_services) Naming.lookup("rmi://" + rmi_host + ":"
-					+ rmi_port + "/s_a_services");
+			System.out.println(rmi_host + rmi_port);
+			remote = (s_a_services) Naming.lookup("rmi://" + rmi_host + ":" + rmi_port + "/s_a_services");
 		}
-		catch (Exception e)
+		catch (RemoteException e)
 		{
-			System.out.println(e);
+			e.printStackTrace();
 		}
+		catch (MalformedURLException e)
+		{
+			e.printStackTrace();
+		}
+		catch (NotBoundException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	public static String local_files()
+	{
+		File[] files = (new File(".")).listFiles();
+		String output = "";
+
+		for (int i = 0; i < files.length; i++)
+		{
+			if (files[i].isFile())
+				output += files[i].getName();
+		}
+
+		return output;
 	}
 
 	public String init(String nombre, String clave) throws RemoteException
 	{
 		if (remote.validate(nombre, clave))
 		{
-			archivo a = new archivo(nombre, nombre, null);
-			return "Bienvenido " + nombre
-					+ ". Usted esta conectado al servidor.\n";
+			return "Bienvenido " + nombre + ". Usted esta conectado al servidor.\n";
 		}
 		else
 			return "Usuario o contrasena incorrecta.\n";
@@ -166,29 +242,62 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 
 	public String close(String nombre, String clave) throws RemoteException
 	{
-		return "Cerrando sesion.\n";
+		if (remote.validate(nombre, clave))
+		{
+			return "Cerrando sesion.\n";
+		}
+		else
+			return "No tienes permisos para usar esta funcion.\n";
 	}
 
 	public String rls(String nombre, String clave) throws RemoteException
 	{
-		return "Listando archivos en el servidor.\n";
+		if (remote.validate(nombre, clave))
+		{
+			return local_files();
+		}
+		else
+			return "No tienes permisos para usar esta funcion.\n";
 	}
 
-	public String sub(String archivo, String nombre, String clave)
-			throws RemoteException
+	public String sub(String nombre, String clave, byte[] file, String f_name) throws RemoteException
 	{
-		return "Subiendo archivo al servidor.\n";
+		if (remote.validate(nombre, clave))
+		{
+			// TODO revsiar si existe antes de subirlo
+			archivo a = new archivo(f_name, nombre, file);
+			return "Subiendo archivo al servidor.\n";
+		}
+
+		return "No tienes permisos para usar esta funcion.\n";
 	}
 
-	public String baj(String archivo, String nombre, String clave)
-			throws RemoteException
+	public byte[] baj(String nombre, String clave, String f_name) throws RemoteException
 	{
-		return "Bajando archivo desde el servidor.\n";
+		if (remote.validate(nombre, clave))
+		{
+			archivo a = new archivo(f_name);
+			return a.file_to_byte();
+		}
+		else
+			return null;
 	}
 
-	public String bor(String archivo, String nombre, String clave)
-			throws RemoteException
+	// TODO check
+	public String bor(String nombre, String clave, String f_name) throws RemoteException
 	{
-		return "Borrando archivo en el servidor.\n";
+		if (remote.validate(nombre, clave))
+		{
+			archivo a = new archivo(f_name);
+			if (nombre.equals(a.get_ownership()))
+			{
+				a.delete();
+				return "Archivo borrado correctamente.\n";
+			}
+			else
+				return "No tienes permisos para borrar este archivo\n";
+		}
+		else
+			return "No tienes permisos para usar esta funcion.\n";
 	}
 }

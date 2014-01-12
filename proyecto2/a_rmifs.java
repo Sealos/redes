@@ -1,9 +1,8 @@
-//java a_rmifs -f usuarios -p puerto 
+// java a_rmifs -f usuarios -p puerto
 // usuarios: Nombre de archivo con usuarios
 // puerto: Donde corre el rmiregistry
 
 import java.net.MalformedURLException;
-import java.rmi.ConnectException;
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.RemoteException;
@@ -28,12 +27,11 @@ public class a_rmifs
 		{
 			a_rmifs_stub stub = new a_rmifs_stub(f_users);
 			LocateRegistry.createRegistry(local_port);
-			Naming.rebind("rmi://localhost:" + local_port + "/s_a_services",
-					stub);
+			Naming.rebind("rmi://localhost:" + local_port + "/s_a_services", stub);
 		}
 		catch (RemoteException e)
 		{
-			System.out.println(e);
+			e.printStackTrace();
 			System.exit(0);
 		}
 		catch (MalformedURLException e)

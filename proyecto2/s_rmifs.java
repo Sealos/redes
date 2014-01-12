@@ -1,8 +1,10 @@
 // Comandos log sal
-// java s_rmifs -l puertolocal -h host -r puerto 
-// puertolocal: Donde esta el rmiregistry info de los objetos del servidor de archivo
+// java s_rmifs -l puertolocal -h host -r puerto
+// puertolocal: Donde esta el rmiregistry info de los objetos del servidor de
+// archivo
 // host: Donde corre el servidor de autenticacion
-// puerto: Donde esta el rmiregistry info de los objetos del servidor de autenticacion
+// puerto: Donde esta el rmiregistry info de los objetos del servidor de
+// autenticacion
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -30,18 +32,19 @@ public class s_rmifs
 		try
 		{
 			s_rmifs_stub stub = new s_rmifs_stub(rmi_host, rmi_port);
-			Naming.rebind("rmi://localhost:" + local_port + "/c_s_services",
-					stub);
 			LocateRegistry.createRegistry(local_port);
+			Naming.rebind("rmi://localhost:" + local_port + "/c_s_services", stub);
 		}
 		catch (RemoteException e)
 		{
+			e.printStackTrace();
 			System.out.println(e);
 			System.exit(0);
 		}
 		catch (MalformedURLException e)
 		{
 			System.out.println("Puerto local no valido");
+			e.printStackTrace();
 			System.exit(0);
 		}
 	}
@@ -80,8 +83,7 @@ public class s_rmifs
 		if ((requerimientos & 7) != 7)
 		{
 			System.out.println("Advertencia, faltan argumentos corriendo con:");
-			System.out.println("java s_rmifs -l " + local_port + " -h "
-					+ rmi_host + " -r " + rmi_port);
+			System.out.println("java s_rmifs -l " + local_port + " -h " + rmi_host + " -r " + (rmi_port + 1));
 		}
 		// TODO verificar integridad de argumentos
 		new s_rmifs(rmi_host, rmi_port, local_port);
