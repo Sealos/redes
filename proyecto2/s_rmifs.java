@@ -6,12 +6,10 @@
 
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
-import java.io.*;
 
-class s_rmifs
+public class s_rmifs
 {
 	private static final int DEFAULT_PORT = 20203;
-	private static s_a_services remote;
 
 	private static int get_opt(String opt)
 	{

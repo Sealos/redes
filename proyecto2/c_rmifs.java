@@ -66,8 +66,6 @@ public class c_rmifs
 		{
 			String servidor = "";
 			int puerto = 0;
-			
-			String [] datosUsuario;
 
 			String cmd;
 			salir = false;
@@ -88,12 +86,13 @@ public class c_rmifs
 					// Direccion de rmi
 					case 1:
 						requerimientos = requerimientos | 2;
-						servidor = args[i + 1];
+						puerto = Integer.parseInt(args[i + 1]);
 						break;
 					// Puerto de rmi
 					case 2:
 						requerimientos = requerimientos | 4;
-						puerto = Integer.parseInt(args[i + 1]);
+						servidor = args[i + 1];
+						
 						break;
 					// Archivos de commandos
 					case 3:
@@ -127,6 +126,12 @@ public class c_rmifs
 					pas = ln[1];
 				}
 				System.out.println(remote.init(user, pas));
+			}
+			else
+			{
+				System.out.println("Error, faltan argumentos");
+				System.out.println("java c_rmifs [-f usuarios] -m servidor -p puerto [-c comandos]");
+				System.exit(0);
 			}
 
 			/*if (f_cmd != null)

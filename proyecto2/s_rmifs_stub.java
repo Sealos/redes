@@ -1,4 +1,5 @@
 import java.rmi.server.UnicastRemoteObject;
+import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.io.File;
 
@@ -74,18 +75,31 @@ public class s_rmifs_stub
 		}
 	}
 
+	private static s_a_services remote;
+
 	public s_rmifs_stub(String rmi_host, int rmi_port)
 		throws RemoteException
 	{
-		// Hacer la conexion a servidor de autenticacion
 		super();
+		try
+		{
+			remote = (s_a_services)Naming.lookup("rmi://" + rmi_host + ":" + rmi_port + "/s_a_services");
+		}
+		catch (Exception e)
+		{
+			System.out.println(e);
+		}
 	}
 
 	public String init(String nombre, String clave)
 		throws RemoteException
 	{
-		return "Bienvenido " + nombre + ". Usted esta conectado al servidor.\n";
+		if (remote.validate(nombre, clave))
+			return "Bienvenido " + nombre + ". Usted esta conectado al servidor.\n";
+		else
+			return "Usuario o contrasena incorrecta.\n";
 	}
+
 	public String close(String nombre, String clave)
 		throws RemoteException
 	{

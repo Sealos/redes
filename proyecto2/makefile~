@@ -1,0 +1,9 @@
+CC = javac
+
+all:
+	$(CC) *.java
+
+clean:
+	rm -f *.class
+
+rebuild: clean all

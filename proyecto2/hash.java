@@ -1,4 +1,3 @@
-
 public class hash<E>
 {
 	private lista<E>[] table;
@@ -127,7 +126,7 @@ public class hash<E>
 			modif = modif + table.length;
 		if (this.table[modif] != null && this.table[modif].remove(e))
 		{
-			size--;
+			--size;
 			return true;
 		}
 		else
@@ -156,23 +155,11 @@ public class hash<E>
 				E temp;
 				while((temp = cl.pop()) != null)
 				{
-					this.add(temp); 
+					this.add(temp);
 					aux--;
 				}
 				clone[i] = null;
 			}
 		}
-	}
-
-	public lista<E> getList()
-	{
-		lista<E> l = new lista<E>();
-		for (int i = 0; i < table.length; i++)
-		{
-			if (table[i] != null)
-				l.concatenar(table[i]);
-		}
-
-		return l;
 	}
 }

@@ -1,23 +1,56 @@
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.RemoteException;
-import java.io.File;
+import java.io.*;
 
 public class a_rmifs_stub
 	extends UnicastRemoteObject
 	implements s_a_services
 {
 
-	public a_rmifs_stub()
+	private static final long serialVersionUID = 4332409159215010949L;
+	hash<usuario> users;
+
+	public a_rmifs_stub(String f_users)
 		throws RemoteException
 	{
-		// Cargar archivos o obtener usuarios
 		super();
+		users = new hash<usuario>(20);
+		String[] ln;
+
+		BufferedReader br = null;
+		try
+		{
+			String line;
+			br = new BufferedReader(new FileReader(f_users));
+ 
+			while ((line = br.readLine()) != null)
+			{
+				System.out.println(line);
+				ln = line.split(":");
+				users.add(new usuario(ln[0], ln[1]));
+			}
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				if (br != null)
+					br.close();
+			}
+			catch (IOException ex)
+			{
+				ex.printStackTrace();
+			}
+		}
 	}
 
-	public Boolean validate(String nombre, String clave)
+	public boolean validate(String nombre, String clave)
 		throws RemoteException
 	{
-		// Validar
-		return true;
+		return users.contains(new usuario(nombre, clave));
 	}
 }

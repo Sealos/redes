@@ -4,11 +4,9 @@
 
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
-import java.io.*;
 
 public class a_rmifs
 {
-
 	private static final int DEFAULT_PORT = 20203;
 
 	private static int get_opt(String opt)
@@ -25,7 +23,7 @@ public class a_rmifs
 	{
 		try
 		{
-			a_rmifs_stub stub = new a_rmifs_stub();
+			a_rmifs_stub stub = new a_rmifs_stub(f_users);
 			LocateRegistry.createRegistry(local_port);
 			Naming.rebind("rmi://localhost:"+ local_port +"/s_a_services", stub);
 		}
@@ -37,19 +35,17 @@ public class a_rmifs
 
 	public static void main(String args[])
 	{
-		BufferedReader f_user = null;
+		String f_user = "";
 		int rmi_port = DEFAULT_PORT;
 		int requerimientos = 0;
 		for(int i = 0; i < args.length; i = i + 2)
 		{
-			try
-			{
 				switch(get_opt(args[i]))
 				{
 					// Archivo de usuarios
 					case 0:
 						requerimientos = requerimientos | 1;
-						f_user = new BufferedReader(new FileReader(new File(args[i + 1])));
+						f_user = args[i + 1];
 						break;
 					// Puerto local de rmi
 					case 1:
@@ -60,18 +56,15 @@ public class a_rmifs
 						System.out.println("Opcion no reconocida " + args[i]);
 						System.exit(0);
 				}
-			}
-			catch (FileNotFoundException e)
-			{
-				System.out.println("No se encontro el archivo de usuarios");
-				System.exit(0);
-			}
 		}
 
 		if ((requerimientos & 3) != 3)
 		{
 			System.out.println("Error, faltan argumentos");
+			System.out.println("java a_rmifs -f usuarios -p puerto");
 			System.exit(0);
 		}
+
+		new a_rmifs(rmi_port, f_user);
 	}
 }
