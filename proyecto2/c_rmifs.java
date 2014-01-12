@@ -22,7 +22,6 @@ import java.io.*;
 public class c_rmifs
 {
 	private static c_s_services remote;
-	public static Boolean salir;
 	public static String user;
 	public static String pas;
 
@@ -68,7 +67,6 @@ public class c_rmifs
 			int puerto = 0;
 
 			String cmd;
-			salir = false;
 			BufferedReader f_cmd = null;
 			BufferedReader f_user = null;
 			int requerimientos = 0;
@@ -144,7 +142,7 @@ public class c_rmifs
 					f_cmd.close();
 			}*/
 
-			while(!salir)
+			while(true)
 			{
 				cmd = System.console().readLine();
 				ln = cmd.split(" ");

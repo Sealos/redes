@@ -7,6 +7,9 @@ public class s_rmifs_stub
 	extends UnicastRemoteObject
 	implements c_s_services
 {
+
+	private static final long serialVersionUID = 2149954566701153431L;
+
 	/**
 	 * Clase para los 20 ultimos comandos del servidor
 	 **/
