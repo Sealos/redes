@@ -1,11 +1,10 @@
-
 public class cola<E> extends lista<E>
 {
 	public cola()
 	{
 		super();
 	}
-	
+
 	public cola(lista<E> list)
 	{
 		head = list.head;
@@ -15,6 +14,7 @@ public class cola<E> extends lista<E>
 
 	/**
 	 * Obtiene el primer elemento de la cola
+	 * 
 	 * @return
 	 */
 	public E pop()

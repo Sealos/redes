@@ -13,15 +13,15 @@ public class hash<E>
 	{
 		this.size = 0;
 		this.table = new lista[tam];
-		this.cota = (tam * 3)/4;
+		this.cota = (tam * 3) / 4;
 		this.cont = 0;
 	}
 
 	/**
-	 * Agrega <i>element</i> a la tabla usando la clase
-	 * str.
-	 *
-	 * @param Elemento de tipo E, con el que se declaro el objeto
+	 * Agrega <i>element</i> a la tabla usando la clase str.
+	 * 
+	 * @param Elemento
+	 *            de tipo E, con el que se declaro el objeto
 	 * @return true si el elemento fue insertado, false en caso contrario
 	 */
 	public boolean add(E e)
@@ -46,29 +46,25 @@ public class hash<E>
 	}
 
 	/**
-	 * Reinicializa la tabla de hash
-	 * queda como recien creada
+	 * Reinicializa la tabla de hash queda como recien creada
 	 */
 	public void clear()
 	{
 		this.size = 0;
-		for (int i = 0 ; i < this.table.length ; i++)
+		for (int i = 0; i < this.table.length; i++)
 			this.table[i] = null;
 	}
 
 	/**
-	 * Determina si el objeto <i>o</i> esta contenido en esta tabla.
-	 * usando str como clave
-	 * {@code Object equals}
-	 *
+	 * Determina si el objeto <i>o</i> esta contenido en esta tabla. usando str
+	 * como clave {@code Object equals}
+	 * 
 	 * @see Object#equals
-	 *
-	 *
 	 */
 	public boolean contains(Object o)
 	{
 		@SuppressWarnings("unchecked")
-		E aux = (E)o;
+		E aux = (E) o;
 		int modif = aux.hashCode() % table.length;
 		if (modif < 0)
 			modif = modif + table.length;
@@ -80,7 +76,7 @@ public class hash<E>
 
 	/**
 	 * Determina si la tabla tiene elementos.
-	 *
+	 * 
 	 * @return true si size() &eq; 0. falso en caso contrario
 	 */
 
@@ -91,7 +87,7 @@ public class hash<E>
 
 	/**
 	 * Retorna el numero de elementos en la tabla
-	 *
+	 * 
 	 * @return el numero de elementos en la tabla
 	 */
 	public int getSize()
@@ -101,8 +97,9 @@ public class hash<E>
 
 	/**
 	 * Obtiene el elemento de la tabla de hash
-	 * @return null si el elemento no esta en la tabla, en caso
-	 * contrario devuelve el elemento
+	 * 
+	 * @return null si el elemento no esta en la tabla, en caso contrario
+	 *         devuelve el elemento
 	 */
 	public E getElem(E e)
 	{
@@ -110,13 +107,14 @@ public class hash<E>
 		if (modif < 0)
 			modif = modif + table.length;
 		if (this.table[modif] != null)
-			return (E)table[modif].getElem(e);
+			return (E) table[modif].getElem(e);
 		else
 			return null;
 	}
 
 	/**
 	 * Elimina un elemento de la tabla de hash
+	 * 
 	 * @return Retorna true si el elemento se elimino, false en caso contrario
 	 */
 	public boolean remove(E e)
@@ -134,8 +132,8 @@ public class hash<E>
 	}
 
 	/**
-	 * Duplica la tabla de hash cuando llega la cantidad de elementos
-	 * es 75% a el tamano de la tabla de hash para evitar colisiones
+	 * Duplica la tabla de hash cuando llega la cantidad de elementos es 75% a
+	 * el tamano de la tabla de hash para evitar colisiones
 	 */
 	@SuppressWarnings("unchecked")
 	private void rehash()
@@ -145,15 +143,15 @@ public class hash<E>
 		int aux = this.size;
 		this.table = new lista[clone.length * 2];
 		this.size = 0;
-		this.cota = (this.table.length * 3)/4;
+		this.cota = (this.table.length * 3) / 4;
 		this.cont = 0;
-		for(int i = 0; i < clone.length && aux > 0; i++)
+		for (int i = 0; i < clone.length && aux > 0; i++)
 		{
 			if (clone[i] != null)
 			{
 				cola<E> cl = new cola<E>(clone[i]);
 				E temp;
-				while((temp = cl.pop()) != null)
+				while ((temp = cl.pop()) != null)
 				{
 					this.add(temp);
 					aux--;

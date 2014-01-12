@@ -13,9 +13,10 @@ Comandos:
 	bor archivo
 	info
 	sal
-*/
+ */
 
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.io.*;
 
@@ -72,14 +73,15 @@ public class c_rmifs
 			int requerimientos = 0;
 			String[] ln;
 
-			for(int i = 0; i < args.length; i = i + 2)
+			for (int i = 0; i < args.length; i = i + 2)
 			{
-				switch(get_opt(args[i]))
+				switch (get_opt(args[i]))
 				{
-					// Archivo de usuario
+				// Archivo de usuario
 					case 0:
 						requerimientos = requerimientos | 1;
-						f_user = new BufferedReader(new FileReader(new File(args[i + 1])));
+						f_user = new BufferedReader(new FileReader(new File(
+								args[i + 1])));
 						break;
 					// Direccion de rmi
 					case 1:
@@ -90,12 +92,13 @@ public class c_rmifs
 					case 2:
 						requerimientos = requerimientos | 4;
 						servidor = args[i + 1];
-						
+
 						break;
 					// Archivos de commandos
 					case 3:
 						requerimientos = requerimientos | 8;
-						f_cmd = new BufferedReader(new FileReader(new File(args[i + 1])));
+						f_cmd = new BufferedReader(new FileReader(new File(
+								args[i + 1])));
 						break;
 					default:
 						System.out.println("Opcion no reconocida " + args[i]);
@@ -106,7 +109,8 @@ public class c_rmifs
 			if ((requerimientos & 6) == 6)
 			{
 				// Obtemenos el RPC
-				remote = (c_s_services)Naming.lookup("rmi://" + servidor + ":" + puerto + "/c_s_services");
+				remote = (c_s_services) Naming.lookup("rmi://" + servidor + ":"
+						+ puerto + "/c_s_services");
 
 				// Obtenemos el usuario con el cual vamos a trabajar
 				if (f_user != null)
@@ -118,7 +122,8 @@ public class c_rmifs
 				}
 				else
 				{
-					System.out.print ("Introduzca sus datos en el formato: <nombre> <clave>");
+					System.out
+							.print("Introduzca sus datos en el formato: <nombre> <clave>");
 					ln = System.console().readLine().split(" ");
 					user = ln[0];
 					pas = ln[1];
@@ -128,47 +133,50 @@ public class c_rmifs
 			else
 			{
 				System.out.println("Error, faltan argumentos");
-				System.out.println("java c_rmifs [-f usuarios] -m servidor -p puerto [-c comandos]");
+				System.out
+						.println("java c_rmifs [-f usuarios] -m servidor -p puerto [-c comandos]");
 				System.exit(0);
 			}
 
-			/*if (f_cmd != null)
-			{
-					while(((cmd = f_cmd.readLine()) != null))
-					{
-						ln = cmd.split(" ");
-						ejecutarComando(ln[0], ln[1]);
-					}
-					f_cmd.close();
-			}*/
+			/*
+			 * if (f_cmd != null) { while(((cmd = f_cmd.readLine()) != null)) {
+			 * ln = cmd.split(" "); ejecutarComando(ln[0], ln[1]); }
+			 * f_cmd.close(); }
+			 */
 
-			while(true)
+			while (true)
 			{
 				cmd = System.console().readLine();
 				ln = cmd.split(" ");
 				ejecutarComando(ln[0], ln[1]);
 			}
 		}
-		catch (Exception e)
+		catch (FileNotFoundException e)
 		{
 			System.out.println(e);
 		}
-		// Colocar catchs
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		catch (NotBoundException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	public static void local_files()
 	{
 		File[] files = (new File(".")).listFiles();
- 
+
 		for (int i = 0; i < files.length; i++)
 		{
 			if (files[i].isFile())
 			{
 				System.out.println(files[i].getName());
-				/*if (!(files.matches("(*\\.(class|java))")))
-				{
-				}
-				*/
+				/*
+				 * if (!(files.matches("(*\\.(class|java))"))) { }
+				 */
 			}
 		}
 	}
@@ -187,20 +195,21 @@ public class c_rmifs
 					local_files();
 					break;
 				case 2:
-					//System.out.println(remote.subirArchivo(user, pas));
+					// System.out.println(remote.subirArchivo(user, pas));
 					break;
 				case 3:
-					//System.out.println(remote.bajarArchivo(user, pas));
+					// System.out.println(remote.bajarArchivo(user, pas));
 					break;
 				case 4:
-					//System.out.println(remote.bor(user, pas));
+					// System.out.println(remote.bor(user, pas));
 					break;
 				case 5:
 					System.out.println("Comandos:");
-					System.out.println("rls | lls | sub <archivo> | baj <archivo> | bor <archivo> | info | sal");
+					System.out
+							.println("rls | lls | sub <archivo> | baj <archivo> | bor <archivo> | info | sal");
 					break;
 				case 6:
-					//System.out.println(remote.close(user, pas));
+					// System.out.println(remote.close(user, pas));
 					System.out.println("Cerrando...");
 					System.exit(0);
 				default:
@@ -210,19 +219,15 @@ public class c_rmifs
 		}
 		catch (RemoteException e)
 		{
-			System.out.println (e);
+			System.out.println(e);
 		}
 	}
 
 	/*
-		InputStream input = new FileInputStream(file); 
-		ByteArrayOutputStream output = new ByteArrayOutputStream();
-		byte[] buffer = new byte[8192];
-
-		for (int length = 0; (length = input.read(buffer)) > 0;) {
-			output.write(buffer, 0, length);
-		}
-
-		byte[] bytes = output.toByteArray(); // Pass that instead to RMI response.
-	*/
+	 * InputStream input = new FileInputStream(file); ByteArrayOutputStream
+	 * output = new ByteArrayOutputStream(); byte[] buffer = new byte[8192]; for
+	 * (int length = 0; (length = input.read(buffer)) > 0;) {
+	 * output.write(buffer, 0, length); } byte[] bytes = output.toByteArray();
+	 * // Pass that instead to RMI response.
+	 */
 }

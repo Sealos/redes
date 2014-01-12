@@ -2,16 +2,13 @@ import java.rmi.server.UnicastRemoteObject;
 import java.rmi.RemoteException;
 import java.io.*;
 
-public class a_rmifs_stub
-	extends UnicastRemoteObject
-	implements s_a_services
+public class a_rmifs_stub extends UnicastRemoteObject implements s_a_services
 {
 
 	private static final long serialVersionUID = 4332409159215010949L;
 	hash<usuario> users;
 
-	public a_rmifs_stub(String f_users)
-		throws RemoteException
+	public a_rmifs_stub(String f_users) throws RemoteException
 	{
 		super();
 		users = new hash<usuario>(20);
@@ -22,7 +19,7 @@ public class a_rmifs_stub
 		{
 			String line;
 			br = new BufferedReader(new FileReader(f_users));
- 
+
 			while ((line = br.readLine()) != null)
 			{
 				System.out.println(line);
@@ -41,15 +38,14 @@ public class a_rmifs_stub
 				if (br != null)
 					br.close();
 			}
-			catch (IOException ex)
+			catch (IOException e)
 			{
-				ex.printStackTrace();
+				e.printStackTrace();
 			}
 		}
 	}
 
-	public boolean validate(String nombre, String clave)
-		throws RemoteException
+	public boolean validate(String nombre, String clave) throws RemoteException
 	{
 		return users.contains(new usuario(nombre, clave));
 	}

@@ -2,6 +2,7 @@ public class usuario
 {
 	private String name;
 	private String pas;
+
 	usuario(String name, String pas)
 	{
 		this.name = name;
@@ -11,7 +12,7 @@ public class usuario
 	/**
 	 * @return the name
 	 */
-	public String getName()
+	public String get_name()
 	{
 		return name;
 	}
@@ -19,7 +20,7 @@ public class usuario
 	/**
 	 * @return the pas
 	 */
-	public String getPas()
+	public String get_pas()
 	{
 		return pas;
 	}

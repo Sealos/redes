@@ -2,8 +2,11 @@
 // usuarios: Nombre de archivo con usuarios
 // puerto: Donde corre el rmiregistry
 
+import java.net.MalformedURLException;
+import java.rmi.ConnectException;
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
+import java.rmi.RemoteException;
 
 public class a_rmifs
 {
@@ -25,11 +28,17 @@ public class a_rmifs
 		{
 			a_rmifs_stub stub = new a_rmifs_stub(f_users);
 			LocateRegistry.createRegistry(local_port);
-			Naming.rebind("rmi://localhost:"+ local_port +"/s_a_services", stub);
+			Naming.rebind("rmi://localhost:" + local_port + "/s_a_services",
+					stub);
 		}
-		catch (Exception e)
+		catch (RemoteException e)
 		{
 			System.out.println(e);
+			System.exit(0);
+		}
+		catch (MalformedURLException e)
+		{
+			e.printStackTrace();
 		}
 	}
 
@@ -38,24 +47,24 @@ public class a_rmifs
 		String f_user = "";
 		int rmi_port = DEFAULT_PORT;
 		int requerimientos = 0;
-		for(int i = 0; i < args.length; i = i + 2)
+		for (int i = 0; i < args.length; i = i + 2)
 		{
-				switch(get_opt(args[i]))
-				{
-					// Archivo de usuarios
-					case 0:
-						requerimientos = requerimientos | 1;
-						f_user = args[i + 1];
-						break;
-					// Puerto local de rmi
-					case 1:
-						requerimientos = requerimientos | 2;
-						rmi_port = Integer.parseInt(args[i + 1]);
-						break;
-					default:
-						System.out.println("Opcion no reconocida " + args[i]);
-						System.exit(0);
-				}
+			switch (get_opt(args[i]))
+			{
+			// Archivo de usuarios
+				case 0:
+					requerimientos = requerimientos | 1;
+					f_user = args[i + 1];
+					break;
+				// Puerto local de rmi
+				case 1:
+					requerimientos = requerimientos | 2;
+					rmi_port = Integer.parseInt(args[i + 1]);
+					break;
+				default:
+					System.out.println("Opcion no reconocida " + args[i]);
+					System.exit(0);
+			}
 		}
 
 		if ((requerimientos & 3) != 3)
@@ -65,6 +74,7 @@ public class a_rmifs
 			System.exit(0);
 		}
 
+		// TODO verificar integridad de argumentos
 		new a_rmifs(rmi_port, f_user);
 	}
 }
