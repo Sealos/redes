@@ -35,18 +35,24 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 		public void print_log()
 		{
 			int j = 1;
-			for (int i = 0; i != counter; i = (i + 1) % 20)
+			int i = counter;
+			int stop = i == 0 ? 19 : counter -1;
+			while (i != stop)
 			{
-				if (!log[counter].equals(""))
+				if (!log[i].equals(""))
 				{
 					if (j < 10)
-						System.out.println(j + "   " + log[counter]);
+						System.out.println(j + "  " + log[i]);
 					else
-						System.out.println(j + "  " + log[counter]);
+						System.out.println(j + " " + log[i]);
+					++j;
 				}
-				++j;
+				i = (i + 1) % 20;
 			}
+
+			System.out.println("");
 		}
+		
 	}
 
 	protected class archivo
@@ -67,6 +73,12 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 		{
 			this.f_name = f_name;
 			this.owner = get_ownership(f_name);
+		}
+
+		public boolean exist()
+		{
+			File file = new File(f_name);
+			return file.exists();
 		}
 
 		public void delete()
@@ -119,7 +131,7 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 			}
 		}
 
-		final private byte[] file_to_byte(String f_name)
+		private byte[] file_to_byte(String f_name)
 		{
 			try
 			{
@@ -148,39 +160,32 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 			return file_to_byte(f_name);
 		}
 
-		final private String get_ownership(String f_name)
+		/**
+		 * @param f_name
+		 * @return
+		 */
+		private String get_ownership(String f_name)
 		{
 			BufferedReader br = null;
 			try
 			{
-				br = new BufferedReader(new FileReader(f_name));
-
-				return br.readLine();
+				br = new BufferedReader(new FileReader(f_name + ".own"));
+				String line = br.readLine();
+				br.close();
+				return line;
 			}
 			catch (FileNotFoundException e)
 			{
-				System.out.println("No se encontro el archivo de ownership para " + f_name);
+				System.out.println("No se encontro el archivo .own para " + f_name);
+				return "";
 			}
 			catch (IOException e)
 			{
-				e.printStackTrace();
+				return "";
 			}
-			finally
-			{
-				try
-				{
-					br.close();
-				}
-				catch (IOException e)
-				{
-					e.printStackTrace();
-				}
-			}
-
-			return null;
 		}
 
-		public String get_ownership()
+		private String get_ownership()
 		{
 			return get_ownership(f_name);
 		}
@@ -192,14 +197,15 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 	}
 
 	private static s_a_services remote;
+	private s_log l;
 
 	public s_rmifs_stub(String rmi_host, int rmi_port) throws RemoteException
 	{
 		super();
+		l = new s_log();
 
 		try
 		{
-			System.out.println(rmi_host + rmi_port);
 			remote = (s_a_services) Naming.lookup("rmi://" + rmi_host + ":" + rmi_port + "/s_a_services");
 		}
 		catch (RemoteException e)
@@ -224,27 +230,30 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 		for (int i = 0; i < files.length; i++)
 		{
 			if (files[i].isFile())
-				output += files[i].getName();
+				output = output + files[i].getName() + "\n";
 		}
 
 		return output;
 	}
 
-	public String init(String nombre, String clave) throws RemoteException
+	public boolean init(String nombre, String clave) throws RemoteException
 	{
 		if (remote.validate(nombre, clave))
 		{
-			return "Bienvenido " + nombre + ". Usted esta conectado al servidor.\n";
+			l.add_log("El usuario " + nombre + " inicio.");
+			return true;
 		}
 		else
-			return "Usuario o contrasena incorrecta.\n";
+			return false;
 	}
 
 	public String close(String nombre, String clave) throws RemoteException
 	{
 		if (remote.validate(nombre, clave))
 		{
-			return "Cerrando sesion.\n";
+			l.add_log("El usuario " + nombre + " uso sal.");
+			l.print_log();
+			return "Cerrando...\n";
 		}
 		else
 			return "No tienes permisos para usar esta funcion.\n";
@@ -254,6 +263,7 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 	{
 		if (remote.validate(nombre, clave))
 		{
+			l.add_log("El usuario " + nombre + " uso rls.");
 			return local_files();
 		}
 		else
@@ -264,9 +274,19 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 	{
 		if (remote.validate(nombre, clave))
 		{
-			// TODO revsiar si existe antes de subirlo
-			archivo a = new archivo(f_name, nombre, file);
-			return "Subiendo archivo al servidor.\n";
+			archivo a = new archivo(f_name);
+			if (a.exist())
+			{
+				l.add_log("El usuario " + nombre + " uso sub en un archivo existente.");
+				return "No se subio el archivo dado que ya existe un\narchivo con el mismo nombre.\n";
+			}
+			else
+			{
+				l.add_log("El usuario " + nombre + " uso sub.");
+				a = new archivo(f_name, nombre, file);
+				return "Subiendo archivo al servidor.\n";
+			}
+
 		}
 
 		return "No tienes permisos para usar esta funcion.\n";
@@ -276,6 +296,7 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 	{
 		if (remote.validate(nombre, clave))
 		{
+			l.add_log("El usuario " + nombre + " uso baj.");
 			archivo a = new archivo(f_name);
 			return a.file_to_byte();
 		}
@@ -283,19 +304,26 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 			return null;
 	}
 
-	// TODO check
 	public String bor(String nombre, String clave, String f_name) throws RemoteException
 	{
 		if (remote.validate(nombre, clave))
 		{
+			l.add_log("El usuario " + nombre + " uso bor.");
 			archivo a = new archivo(f_name);
-			if (nombre.equals(a.get_ownership()))
+			System.out.println(nombre + " " + a.get_ownership());
+			if (nombre.equals(a.get_owner()))
 			{
 				a.delete();
 				return "Archivo borrado correctamente.\n";
 			}
 			else
-				return "No tienes permisos para borrar este archivo\n";
+			{
+				if (a.exist())
+					return "No tienes permisos para borrar este archivo\n";
+				else
+					return "El archivo no existe.\n";
+
+			}
 		}
 		else
 			return "No tienes permisos para usar esta funcion.\n";

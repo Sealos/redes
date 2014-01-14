@@ -3,7 +3,7 @@ import java.rmi.RemoteException;
 
 public interface c_s_services extends Remote
 {
-	public String init(String nombre, String clave) throws RemoteException;
+	public boolean init(String nombre, String clave) throws RemoteException;
 
 	public String close(String nombre, String clave) throws RemoteException;
 
