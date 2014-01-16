@@ -1,14 +1,13 @@
 /**
- * Clase que implementa la interfaz List
- * Esta es una clase parametrizada con tipo (clase) E; i.e., la
- * lista contiene elementos de tipo E.
+ * Clase que implementa la interfaz List Esta es una clase parametrizada con
+ * tipo (clase) E; i.e., la lista contiene elementos de tipo E.
  */
 public class lista<E>
 {
 	protected Caja head;
 	protected Caja tail;
 	protected int size;
-	
+
 	protected class Caja
 	{
 		protected E elem;
@@ -24,12 +23,12 @@ public class lista<E>
 		{
 			next = a;
 		}
-		
+
 		public Caja getNext()
 		{
 			return next;
 		}
-		
+
 		public E getElem()
 		{
 			return elem;
@@ -37,8 +36,8 @@ public class lista<E>
 	}
 
 	/**
-		* Crea una lista de tipos E.
-	*/
+	 * Crea una lista de tipos E.
+	 */
 	public lista()
 	{
 		size = 0;
@@ -47,14 +46,14 @@ public class lista<E>
 	}
 
 	/**
-		* Agrega un elemento al final de la lista.
-	*/
+	 * Agrega un elemento al final de la lista.
+	 */
 	public boolean add(E element)
 	{
-		if(!this.contains(element))
+		if (!this.contains(element))
 		{
 			Caja a = new Caja(element);
-			
+
 			if (head == null)
 				head = a;
 			else
@@ -69,9 +68,9 @@ public class lista<E>
 	}
 
 	/**
-		* Elimina todos los elementos de la lista. La lista queda
-		* como recien creada.
-	*/
+	 * Elimina todos los elementos de la lista. La lista queda como recien
+	 * creada.
+	 */
 	public void clear()
 	{
 		head = null;
@@ -80,42 +79,43 @@ public class lista<E>
 	}
 
 	/**
-		* Determina si el elemento dado esta en la lista.
-	*/
+	 * Determina si el elemento dado esta en la lista.
+	 */
 	@SuppressWarnings("unchecked")
 	public boolean contains(Object element)
 	{
-		
+
 		Iterador iter = this.iterador();
 		boolean c = false;
 		E aux;
 		while (iter.hasNext() && !c)
 		{
-			aux = (E)iter.next();
+			aux = (E) iter.next();
 			c = aux.equals(element);
 		}
 		return c;
 	}
 
 	/**
-		* Determina si la lista dada es igual a la lista.
-	*/
+	 * Determina si la lista dada es igual a la lista.
+	 */
 	@SuppressWarnings("unchecked")
 	public boolean equals(Object list)
 	{
-		lista<E> lista = (list instanceof lista<?>) ? (lista<E>)list : null;
+		lista<E> lista = (list instanceof lista<?>) ? (lista<E>) list : null;
 		if (lista == null)
 			return false;
-		
+
 		if (this.size != lista.getSize())
 			return false;
 		else
-		{	
+		{
 			E aux;
 			boolean b = true;
 			Iterador iter = lista.iterador();
-			while(iter.hasNext() && b){
-				aux = (E)iter.next();
+			while (iter.hasNext() && b)
+			{
+				aux = (E) iter.next();
 				b = this.contains(aux);
 			}
 			return b;
@@ -123,28 +123,28 @@ public class lista<E>
 	}
 
 	/**
-		* Determina si la lista es vacia.
-	*/
+	 * Determina si la lista es vacia.
+	 */
 	public boolean isEmpty()
 	{
 		return head == null;
 	}
 
 	/**
-		* Retorna el numero de elementos en la lista
-	*/
+	 * Retorna el numero de elementos en la lista
+	 */
 	public int getSize()
 	{
 		return size;
 	}
 
 	/**
-	* Retorna un arreglo que contiene todos los elementos
-	* en esta lista {@code Milista}.
-	*
-	* @return an array of the elements from this {@code Milista}.
-	*/
-	
+	 * Retorna un arreglo que contiene todos los elementos en esta lista
+	 * {@code Milista}.
+	 * 
+	 * @return an array of the elements from this {@code Milista}.
+	 */
+
 	@SuppressWarnings("unchecked")
 	public Object[] toArray()
 	{
@@ -154,17 +154,16 @@ public class lista<E>
 		else
 		{
 			Iterador iter = this.iterador();
-			for(int i = 0; iter.hasNext(); i++)
-				a[i] = (E)iter.next();
+			for (int i = 0; iter.hasNext(); i++)
+				a[i] = (E) iter.next();
 			return a;
 		}
 	}
-	
+
 	/**
-		* Devuelve el elemento en la lista copia de e 
-		* si no existe devuelve null.
-	*/
-	
+	 * Devuelve el elemento en la lista copia de e si no existe devuelve null.
+	 */
+
 	@SuppressWarnings("unchecked")
 	public E getElem(E e)
 	{
@@ -172,8 +171,8 @@ public class lista<E>
 		E aux;
 		while (iter.hasNext())
 		{
-			aux = (E)iter.next();
-			if(aux.equals(e))
+			aux = (E) iter.next();
+			if (aux.equals(e))
 				return aux;
 		}
 		return null;
@@ -185,15 +184,15 @@ public class lista<E>
 		lista<E> f = new lista<E>();
 		Iterador iter = iterador();
 		while (iter.hasNext())
-			f.add((E)iter.next());
+			f.add((E) iter.next());
 
 		return f;
 	}
 
 	/**
-		* Elimina el elemento dado de la lista. Si la lista cambia,
-		* retorna true, sino retorna false.
-	*/
+	 * Elimina el elemento dado de la lista. Si la lista cambia, retorna true,
+	 * sino retorna false.
+	 */
 	public boolean remove(E element)
 	{
 		if (this.size == 0)
@@ -202,13 +201,13 @@ public class lista<E>
 		{
 			Caja actual = this.head;
 			Caja anterior = null;
-			while ( actual != null && !actual.getElem().equals(element))
+			while (actual != null && !actual.getElem().equals(element))
 			{
 				anterior = actual;
 				actual = actual.getNext();
 			}
 
-			if (actual != null )
+			if (actual != null)
 			{
 				if (anterior != null)
 				{
@@ -233,20 +232,20 @@ public class lista<E>
 		E aux;
 		while (iter.hasNext())
 		{
-			aux = (E)iter.next();
+			aux = (E) iter.next();
 			add(aux);
 		}
 	}
-	
+
 	/**
-		* Devuelve un Iterador sobre this.
-	*/
-	
+	 * Devuelve un Iterador sobre this.
+	 */
+
 	public Iterador iterador()
 	{
 		return new Iterador(this);
 	}
-	
+
 	private class Iterador
 	{
 		private Caja pos, aux;
