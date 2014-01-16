@@ -47,25 +47,26 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 		 *
 		 * @return
 		 */
-		public void print_log()
+		public String print_log()
 		{
 			int j = 1;
 			int i = counter;
 			int stop = i == 0 ? 19 : counter -1;
+			String out = "";
 			while (i != stop)
 			{
 				if (!log[i].equals(""))
 				{
 					if (j < 10)
-						System.out.println(j + "  " + log[i]);
+						out = out + j + "  " + log[i] + "\n";
 					else
-						System.out.println(j + " " + log[i]);
+						out = out + j + " " + log[i] + "\n";
 					++j;
 				}
 				i = (i + 1) % 20;
 			}
 
-			System.out.println("");
+			return out;
 		}
 		
 	}
@@ -360,7 +361,6 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 		if (remote.validate(nombre, clave))
 		{
 			l.add_log("El usuario " + nombre + " uso sal.");
-			l.print_log();
 			return "Cerrando...\n";
 		}
 		else
@@ -469,5 +469,10 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 		}
 		else
 			return "No tienes permisos para usar esta funcion.\n";
+	}
+
+	public String print_log()
+	{
+		return l.print_log();
 	}
 }

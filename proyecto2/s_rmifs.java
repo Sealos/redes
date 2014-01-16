@@ -14,6 +14,7 @@ import java.rmi.registry.LocateRegistry;
 public class s_rmifs
 {
 	private static final int DEFAULT_PORT = 20203;
+	private s_rmifs_stub stub;
 
 	/**
 	 * Verifica si la opcion es alguna de las validas
@@ -34,6 +35,46 @@ public class s_rmifs
 	}
 
 	/**
+	 * Verifica si el comando ingresado es valido
+	 *
+	 * @param Nombre del comando
+	 * @return Un indice que indica la opcion que se elegio o si fue un error
+	 */
+	private static int get_cmd(String cmd)
+	{
+		if (cmd.equals("log"))
+			return 0;
+		else if (cmd.equals("sal"))
+			return 1;
+		else
+			return -1;
+	}
+
+	/**
+	 * Realiza el llamado de una funcion
+	 * 
+	 * @param Nombre del comando
+	 */
+	public void ejecutar_comando(String cmd)
+	{
+		switch (get_cmd(cmd))
+		{
+			// rls
+			case 0:
+				if (stub != null)
+					stub.print_log();
+				break;
+			// sal
+			case 1:
+				System.out.println("Cerrando...");
+				System.exit(0);
+			default:
+				System.out.println("No existe el comando " + cmd);
+				break;
+		}
+	}
+
+	/**
 	 * Creacion del url del servidor remoto de archivos
 	 *
 	 * @param Host donde se ejecuta el servidor de autenticacion
@@ -45,7 +86,7 @@ public class s_rmifs
 	{
 		try
 		{
-			s_rmifs_stub stub = new s_rmifs_stub(rmi_host, rmi_port);
+			stub = new s_rmifs_stub(rmi_host, rmi_port);
 			LocateRegistry.createRegistry(local_port);
 			Naming.rebind("rmi://localhost:" + local_port + "/c_s_services", stub);
 		}
@@ -58,6 +99,13 @@ public class s_rmifs
 		{
 			System.out.println("El URL del servidor es incorrecto");
 			System.exit(0);
+		}
+
+		String cmd;
+		while (true)
+		{
+			cmd = System.console().readLine();
+			ejecutar_comando(cmd);
 		}
 	}
 
