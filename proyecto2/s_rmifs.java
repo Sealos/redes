@@ -1,11 +1,7 @@
 // Comandos log sal
 // java s_rmifs -l puertolocal -h host -r puerto
-<<<<<<< HEAD
-// puertolocal: Donde esta el rmiregistry info de los objetos del servidor de archivo
-=======
 // puertolocal: Donde esta el rmiregistry info de los objetos del servidor de
 // archivo
->>>>>>> 41b44c7c5fff73bee61f359ab450ec130a444c52
 // host: Donde corre el servidor de autenticacion
 // puerto: Donde esta el rmiregistry info de los objetos del servidor de
 // autenticacion
@@ -19,6 +15,12 @@ public class s_rmifs
 {
 	private static final int DEFAULT_PORT = 20203;
 
+	/**
+	 * Verifica si la opcion es alguna de las validas
+	 *
+	 * @param Opcion del argumento de entrada
+	 * @return Un indice que indica la opcion que se elegio o si fue un error
+	 */
 	private static int get_opt(String opt)
 	{
 		if (opt.equals("-l"))
@@ -31,6 +33,14 @@ public class s_rmifs
 			return -1;
 	}
 
+	/**
+	 * Creacion del url del servidor remoto de archivos
+	 *
+	 * @param Host donde se ejecuta el servidor de autenticacion
+	 * @param Puerto donde se ejecuta el servidor de autenticacion
+	 * @param Puerto de ejecucion del servidor de archivo
+	 * @return 
+	 */
 	public s_rmifs(String rmi_host, int rmi_port, int local_port)
 	{
 		try
@@ -41,14 +51,12 @@ public class s_rmifs
 		}
 		catch (RemoteException e)
 		{
-			e.printStackTrace();
-			System.out.println(e);
+			System.out.println("Ocurrio un problema al intentar acceder al servidor de las funciones remotas");
 			System.exit(0);
 		}
 		catch (MalformedURLException e)
 		{
-			System.out.println("Puerto local no valido");
-			e.printStackTrace();
+			System.out.println("El URL del servidor es incorrecto");
 			System.exit(0);
 		}
 	}
@@ -89,7 +97,14 @@ public class s_rmifs
 			System.out.println("Advertencia, faltan argumentos corriendo con:");
 			System.out.println("java s_rmifs -l " + local_port + " -h " + rmi_host + " -r " + (rmi_port + 1));
 		}
-		// TODO verificar integridad de argumentos
+
+		if (local_port<=1024 | local_port> 65535 | rmi_port<=1024 | rmi_port> 65535)
+		{
+			System.out.println("Usted ingreso un numero de puerto invalido");
+			System.out.println("El numero de puerto debe estar en el rango de (1024,65535)");
+			System.exit(0);
+		}
+
 		new s_rmifs(rmi_host, rmi_port, local_port);
 	}
 }

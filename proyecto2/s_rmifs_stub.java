@@ -18,6 +18,11 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 		private String[] log;
 		private int counter;
 
+		/**
+		 * Constructor de la clase s_log
+		 *
+		 * @return
+		 */
 		public s_log()
 		{
 			log = new String[20];
@@ -26,12 +31,22 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 			counter = 0;
 		}
 
+		/**
+		 * Agrega un comando al log
+		 *
+		 * @return
+		 */
 		public void add_log(String cmd)
 		{
 			log[counter] = cmd;
 			counter = (counter + 1) % 20;
 		}
 
+		/**
+		 * Imprime el conjunto de comandos en el log
+		 *
+		 * @return
+		 */
 		public void print_log()
 		{
 			int j = 1;
@@ -60,7 +75,14 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 		final private String f_name;
 		final private String owner;
 
-		// Para un nuevo archivo
+		/**
+		 * Constructor de la clase archivo
+		 *
+		 * @param Nombre del archivo
+		 * @param Nombre del propietario del archivo
+		 * @param Bytes del contenido del archivo
+		 * @return
+		 */
 		archivo(String f_name, String owner, byte[] file)
 		{
 			this.f_name = f_name;
@@ -69,18 +91,34 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 			write_ownership(owner, f_name);
 		}
 
+		/**
+		 * Constructor de la clase archivo
+		 *
+		 * @param Nombre del archivo
+		 * @return
+		 */
 		archivo(String f_name)
 		{
 			this.f_name = f_name;
 			this.owner = get_ownership(f_name);
 		}
 
+		/**
+		 * Indica si existe un archivo con el mismo nombre en el directorio
+		 *
+		 * @return Devuelve true si el archivo existe, false en caso contrario
+		 */
 		public boolean exist()
 		{
 			File file = new File(f_name);
 			return file.exists();
 		}
 
+		/**
+		 * Borra el archivo del directorio y el archivo que indica su propietario
+		 *
+		 * @return
+		 */
 		public void delete()
 		{
 			File file = new File("./" + f_name + ".own");
@@ -89,7 +127,13 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 			file.delete();
 		}
 
-		// TODO verificar si ya existe el archivo
+		/**
+		 * Toma una cadena de bytes y se usa para crear un archivo con esos datos
+		 *
+		 * @param Bytes que seran contenido del archivo a crear
+		 * @param Nombre del archivo
+		 * @return 
+		 */
 		private void byte_to_file(byte[] file, String f_name)
 		{
 			try
@@ -102,14 +146,24 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 			}
 			catch (FileNotFoundException e)
 			{
-				e.printStackTrace();
+				System.out.println("El archivo " + f_name + "no se encontro");
+				System.exit(0);
 			}
 			catch (IOException e)
 			{
-				e.printStackTrace();
+				System.out.println("Error al acceder al archivo " + f_name);
+				System.exit(0);
 			}
 		}
 
+		/**
+		 * Dado un nombre de archivo crea un archivo .own
+		 * con el nombre del propietario del archivo
+		 *
+		 * @param Nombre del propietario
+		 * @param Nombre del archivo
+		 * @return 
+		 */
 		private void write_ownership(String owner, String f_name)
 		{
 			try
@@ -127,10 +181,17 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 			}
 			catch (IOException e)
 			{
-				System.out.println(e);
+				System.out.println("Error al acceder al archivo de verificacion de propiedad");
+				System.exit(0);
 			}
 		}
 
+		/**
+		 * El contenido de un archivo se devuelven como una cadena de bytes
+		 *
+		 * @param Nombre del archivo
+		 * @return La cadena de bytes que representan el contenido del archivo
+		 */
 		private byte[] file_to_byte(String f_name)
 		{
 			try
@@ -144,25 +205,32 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 			}
 			catch (FileNotFoundException e)
 			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("El archivo " + f_name + "no se encontro");
+				System.exit(0);
 			}
 			catch (IOException e)
 			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("Error al acceder al archivo " + f_name);
+				System.exit(0);
 			}
 			return null;
 		}
 
+		/**
+		 * El contenido de un archivo se devuelven como una cadena de bytes
+		 *
+		 * @return La cadena de bytes que representan el contenido del archivo
+		 */
 		public byte[] file_to_byte()
 		{
 			return file_to_byte(f_name);
 		}
 
 		/**
-		 * @param f_name
-		 * @return
+		 * Devuelve el nombre del propietario del archivo
+		 *
+		 * @param Nombre del archivo
+		 * @return El nombre del propietario
 		 */
 		private String get_ownership(String f_name)
 		{
@@ -185,11 +253,21 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 			}
 		}
 
+		/**
+		 * Devuelve el nombre del propietario del archivo
+		 *
+		 * @return El nombre del propietario
+		 */
 		private String get_ownership()
 		{
 			return get_ownership(f_name);
 		}
 
+		/**
+		 * Devuelve el valor de la variable owner
+		 *
+		 * @return El nombre del propietario
+		 */
 		public String get_owner()
 		{
 			return owner;
@@ -199,6 +277,13 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 	private static s_a_services remote;
 	private s_log l;
 
+	/**
+	 * Inicializacion del servidor de archivos
+	 *
+	 * @param Host del servidor de autenticacion
+	 * @param Puerto del servidor de autenticacion
+	 * @return 
+	 */
 	public s_rmifs_stub(String rmi_host, int rmi_port) throws RemoteException
 	{
 		super();
@@ -210,18 +295,26 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 		}
 		catch (RemoteException e)
 		{
-			e.printStackTrace();
+			System.out.println("Ocurrio un problema al intentar acceder al servidor de las funciones remotas");
+			System.exit(0);
 		}
 		catch (MalformedURLException e)
 		{
-			e.printStackTrace();
+			System.out.println("El URL del servidor es incorrecto");
+			System.exit(0);
 		}
 		catch (NotBoundException e)
 		{
-			e.printStackTrace();
+			System.out.println("El URL del servidor no existe");
+			System.exit(0);
 		}
 	}
 
+	/**
+	 * Busca el conjunto de archivos que se encuentran en el directorio actual
+	 *
+	 * @return Los nombres de los archivos.
+	 */
 	public static String local_files()
 	{
 		File[] files = (new File(".")).listFiles();
@@ -236,6 +329,13 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 		return output;
 	}
 
+	/**
+	 * Realiza el inicio de sesion del cliente
+	 *
+	 * @param Nombre del cliente
+	 * @param Clave del cliente
+	 * @return Devuelve true si la sesion se inicio con exito, false en caso contrario
+	 */
 	public boolean init(String nombre, String clave) throws RemoteException
 	{
 		if (remote.validate(nombre, clave))
@@ -247,6 +347,14 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 			return false;
 	}
 
+	/**
+	 * Realiza el cierre de sesion del cliente
+	 *
+	 * @param Nombre del cliente
+	 * @param Clave del cliente
+	 * @return Devuelve un string que indica si realizo el cierre de sesion 
+	 * en caso contrario se le indica el motivo del porque no se concreto el cierre
+	 */
 	public String close(String nombre, String clave) throws RemoteException
 	{
 		if (remote.validate(nombre, clave))
@@ -259,6 +367,14 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 			return "No tienes permisos para usar esta funcion.\n";
 	}
 
+	/**
+	 * Muestra los archivos en el directorio del servidor
+	 *
+	 * @param Nombre del cliente
+	 * @param Clave del cliente
+	 * @return Devuelve los nombres de los archivos en caso de exito
+	 * en caso contrario se indica el motivo del porque no se concreto la accion
+	 */
 	public String rls(String nombre, String clave) throws RemoteException
 	{
 		if (remote.validate(nombre, clave))
@@ -270,6 +386,15 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 			return "No tienes permisos para usar esta funcion.\n";
 	}
 
+	/**
+	 * Sube un archivo del cliente al servidor
+	 *
+	 * @param Nombre del cliente
+	 * @param Clave del cliente
+	 * @param Cadena de bytes con la informacion del archivo
+	 * @param Nombre del archivo a subir
+	 * @return Devuelve un mensaje indicando lo ocurrido con esta accion
+	 */
 	public String sub(String nombre, String clave, byte[] file, String f_name) throws RemoteException
 	{
 		if (remote.validate(nombre, clave))
@@ -292,6 +417,15 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 		return "No tienes permisos para usar esta funcion.\n";
 	}
 
+	/**
+	 * Baja un archivo del servidor
+	 *
+	 * @param Nombre del cliente
+	 * @param Clave del cliente
+	 * @param Nombre del archivo a bajar
+	 * @return En caso de exito devuelve los bytes con la informacion del archivo,
+	 * caso contrario devuelve null
+	 */
 	public byte[] baj(String nombre, String clave, String f_name) throws RemoteException
 	{
 		if (remote.validate(nombre, clave))
@@ -304,6 +438,14 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 			return null;
 	}
 
+	/**
+	 * Borra un archivo del servidor
+	 *
+	 * @param Nombre del cliente
+	 * @param Clave del cliente
+	 * @param Nombre del archivo
+	 * @return Devuelve un mensaje indicando lo ocurrido con esta accion
+	 */
 	public String bor(String nombre, String clave, String f_name) throws RemoteException
 	{
 		if (remote.validate(nombre, clave))

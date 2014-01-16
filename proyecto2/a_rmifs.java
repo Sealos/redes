@@ -11,6 +11,12 @@ public class a_rmifs
 {
 	private static final int DEFAULT_PORT = 20203;
 
+	/**
+	 * Verifica si la opcion es alguna de las validas
+	 *
+	 * @param Opcion del argumento de entrada
+	 * @return Devuelve 0 si la opcion es -f, 1 si es -p, -1 en caso contrario
+	 */
 	private static int get_opt(String opt)
 	{
 		if (opt.equals("-f"))
@@ -21,6 +27,13 @@ public class a_rmifs
 			return -1;
 	}
 
+	/**
+	 * Creacion del url del servidor remoto de autenticacion
+	 *
+	 * @param Puerto de ejecucion del servidor
+	 * @param Direccion del archivo con las tuplas de usuario:clave validos
+	 * @return 
+	 */
 	public a_rmifs(int local_port, String f_users)
 	{
 		try
@@ -31,12 +44,13 @@ public class a_rmifs
 		}
 		catch (RemoteException e)
 		{
-			e.printStackTrace();
+			System.out.println("Ocurrio un problema al intentar acceder al servidor de las funciones remotas");
 			System.exit(0);
 		}
 		catch (MalformedURLException e)
 		{
-			e.printStackTrace();
+			System.out.println("El URL del servidor es incorrecto");
+			System.exit(0);
 		}
 	}
 
@@ -72,7 +86,13 @@ public class a_rmifs
 			System.exit(0);
 		}
 
-		// TODO verificar integridad de argumentos
+		if (rmi_port<=1024 | rmi_port> 65535)
+		{
+			System.out.println("Usted ingreso un numero de puerto invalido");
+			System.out.println("El numero de puerto debe estar en el rango de (1024,65535)");
+			System.exit(0);
+		}
+
 		new a_rmifs(rmi_port, f_user);
 	}
 }

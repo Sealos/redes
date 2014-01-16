@@ -17,6 +17,12 @@ public class c_rmifs
 	public static String user;
 	public static String pas;
 
+	/**
+	 * Verifica si la opcion es alguna de las validas
+	 *
+	 * @param Opcion del argumento de entrada
+	 * @return Un indice que indica la opcion que se elegio o si fue un error
+	 */
 	private static int get_opt(String opt)
 	{
 		if (opt.equals("-f"))
@@ -31,6 +37,12 @@ public class c_rmifs
 			return -1;
 	}
 
+	/**
+	 * Verifica si el comando ingresado es valido
+	 *
+	 * @param Nombre del comando
+	 * @return Un indice que indica la opcion que se elegio o si fue un error
+	 */
 	private static int get_cmd(String cmd)
 	{
 		if (cmd.equals("rls"))
@@ -51,6 +63,12 @@ public class c_rmifs
 			return -1;
 	}
 
+	/**
+	 * El contenido de un archivo se devuelven como una cadena de bytes
+	 *
+	 * @param Nombre del archivo
+	 * @return La cadena de bytes que representan el contenido del archivo
+	 */
 	private static byte[] file_to_byte(String f_name)
 	{
 		try
@@ -64,17 +82,24 @@ public class c_rmifs
 		}
 		catch (FileNotFoundException e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("El archivo " + f_name + "no se encontro");
+			System.exit(0);
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Error al acceder al archivo " + f_name);
+			System.exit(0);
 		}
 		return null;
 	}
 
+	/**
+	 * Toma una cadena de bytes y se usa para crear un archivo con esos datos
+	 *
+	 * @param Bytes que seran contenido del archivo a crear
+	 * @param Nombre del archivo
+	 * @return 
+	 */
 	private static void byte_to_file(byte[] file, String f_name)
 	{
 		try
@@ -93,11 +118,13 @@ public class c_rmifs
 		}
 		catch (FileNotFoundException e)
 		{
-			e.printStackTrace();
+			System.out.println("El archivo " + f_name + "no se encontro");
+			System.exit(0);
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			System.out.println("Error al acceder al archivo " + f_name);
+			System.exit(0);
 		}
 	}
 
@@ -222,19 +249,26 @@ public class c_rmifs
 		}
 		catch (FileNotFoundException e)
 		{
-			// Cambiar
-			System.out.println(e);
+			System.out.println("El archivo de usuarios no se encontro");
+			System.exit(0);
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			System.out.println("Error al acceder al archivo de usuarios");
+			System.exit(0);
 		}
 		catch (NotBoundException e)
 		{
-			System.out.println("");
+			System.out.println("El URL del servidor no existe");
+			System.exit(0);
 		}
 	}
 
+	/**
+	 * Busca el conjunto de archivos que se encuentran en el directorio actual
+	 *
+	 * @return Los nombres de los archivos.
+	 */
 	public static void local_files()
 	{
 		File[] files = (new File(".")).listFiles();
@@ -248,6 +282,12 @@ public class c_rmifs
 		}
 	}
 
+	/**
+	 * Realiza el llamado a una funcion remota segun un comando dado
+	 * 
+	 * @param Nombre del comando
+	 * @return
+	 */
 	public static void ejecutar_comando(String cmd)
 	{
 		String[] ln = cmd.split(" ");
