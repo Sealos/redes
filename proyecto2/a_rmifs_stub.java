@@ -4,13 +4,16 @@ import java.io.*;
 
 public class a_rmifs_stub extends UnicastRemoteObject implements s_a_services
 {
+
+	private static final long serialVersionUID = 4062640676366224690L;
 	hash<usuario> users;
 
 	/**
 	 * Inicializacion del servidor de autenticacion
-	 *
-	 * @param Direccion del archivo con las tuplas de usuario:clave validos
-	 * @return 
+	 * 
+	 * @param Direccion
+	 *            del archivo con las tuplas de usuario:clave validos
+	 * @return
 	 */
 	public a_rmifs_stub(String f_users) throws RemoteException
 	{
@@ -26,10 +29,14 @@ public class a_rmifs_stub extends UnicastRemoteObject implements s_a_services
 
 			while ((line = br.readLine()) != null)
 			{
-				System.out.println(line);
 				ln = line.split(":");
 				users.add(new usuario(ln[0], ln[1]));
 			}
+		}
+		catch (FileNotFoundException e)
+		{
+			System.out.println("No se encontro el archivo " + f_users);
+			System.exit(0);
 		}
 		catch (IOException e)
 		{
@@ -46,16 +53,17 @@ public class a_rmifs_stub extends UnicastRemoteObject implements s_a_services
 			catch (IOException e)
 			{
 				System.out.println("Error al cerrar el archivo " + f_users);
-				System.exit(0);
 			}
 		}
 	}
 
 	/**
 	 * Verifica si la tupla nombre:clave
-	 *
-	 * @param Nombre a verificar
-	 * @param Clave a verificar
+	 * 
+	 * @param Nombre
+	 *            a verificar
+	 * @param Clave
+	 *            a verificar
 	 * @return Devuelve true si son iguales, false en caso contrario
 	 */
 	public boolean validate(String nombre, String clave) throws RemoteException
