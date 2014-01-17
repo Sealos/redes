@@ -14,8 +14,7 @@ public class a_rmifs
 	/**
 	 * Verifica si la opcion es alguna de las validas
 	 * 
-	 * @param Opcion
-	 *            del argumento de entrada
+	 * @param Opcion del argumento de entrada
 	 * @return Devuelve 0 si la opcion es -f, 1 si es -p, -1 en caso contrario
 	 */
 	private static int get_opt(String opt)
@@ -31,10 +30,8 @@ public class a_rmifs
 	/**
 	 * Creacion del url del servidor remoto de autenticacion
 	 * 
-	 * @param Puerto
-	 *            de ejecucion del servidor
-	 * @param Direccion
-	 *            del archivo con las tuplas de usuario:clave validos
+	 * @param Puerto de ejecucion del servidor
+	 * @param Direccion del archivo con las tuplas de usuario:clave validos
 	 * @return
 	 */
 	public a_rmifs(int local_port, String f_users)

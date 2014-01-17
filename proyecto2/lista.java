@@ -1,6 +1,6 @@
 /**
- * Clase que implementa la interfaz List Esta es una clase parametrizada con
- * tipo (clase) E; i.e., la lista contiene elementos de tipo E.
+ * Clase que implementa la interfaz List Esta es una clase parametrizada con tipo (clase) E; i.e., la lista contiene
+ * elementos de tipo E.
  */
 public class lista<E>
 {
@@ -68,8 +68,7 @@ public class lista<E>
 	}
 
 	/**
-	 * Elimina todos los elementos de la lista. La lista queda como recien
-	 * creada.
+	 * Elimina todos los elementos de la lista. La lista queda como recien creada.
 	 */
 	public void clear()
 	{
@@ -139,8 +138,7 @@ public class lista<E>
 	}
 
 	/**
-	 * Retorna un arreglo que contiene todos los elementos en esta lista
-	 * {@code Milista}.
+	 * Retorna un arreglo que contiene todos los elementos en esta lista {@code Milista}.
 	 * 
 	 * @return an array of the elements from this {@code Milista}.
 	 */
@@ -190,8 +188,7 @@ public class lista<E>
 	}
 
 	/**
-	 * Elimina el elemento dado de la lista. Si la lista cambia, retorna true,
-	 * sino retorna false.
+	 * Elimina el elemento dado de la lista. Si la lista cambia, retorna true, sino retorna false.
 	 */
 	public boolean remove(E element)
 	{

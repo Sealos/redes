@@ -1,9 +1,7 @@
 /*
- * java c_rmifs [-f usuarios] -m servidor -p puerto [-c comandos] Invocacion:
- * usuarios: Nombre de archivo? con usuario y claves servidor: direccion de
- * servidor de archivos puerto: rmiregistry del servidor de archivos comandos:
- * Comandos a ejecutar Comandos: rls lls sub archivo baj archivo bor archivo
- * info sal
+ * java c_rmifs [-f usuarios] -m servidor -p puerto [-c comandos] Invocacion: usuarios: Nombre de archivo? con usuario y
+ * claves servidor: direccion de servidor de archivos puerto: rmiregistry del servidor de archivos comandos: Comandos a
+ * ejecutar Comandos: rls lls sub archivo baj archivo bor archivo info sal
  */
 
 import java.rmi.Naming;
@@ -20,8 +18,7 @@ public class c_rmifs
 	/**
 	 * Verifica si la opcion es alguna de las validas
 	 * 
-	 * @param Opcion
-	 *            del argumento de entrada
+	 * @param Opcion del argumento de entrada
 	 * @return Un indice que indica la opcion que se elegio o si fue un error
 	 */
 	private static int get_opt(String opt)
@@ -41,8 +38,7 @@ public class c_rmifs
 	/**
 	 * Verifica si el comando ingresado es valido
 	 * 
-	 * @param Nombre
-	 *            del comando
+	 * @param Nombre del comando
 	 * @return Un indice que indica la opcion que se elegio o si fue un error
 	 */
 	private static int get_cmd(String cmd)
@@ -68,8 +64,7 @@ public class c_rmifs
 	/**
 	 * El contenido de un archivo se devuelven como una cadena de bytes
 	 * 
-	 * @param Nombre
-	 *            del archivo
+	 * @param Nombre del archivo
 	 * @return La cadena de bytes que representan el contenido del archivo
 	 */
 	private static byte[] file_to_byte(String f_name)
@@ -97,10 +92,8 @@ public class c_rmifs
 	/**
 	 * Toma una cadena de bytes y se usa para crear un archivo con esos datos
 	 * 
-	 * @param Bytes
-	 *            que seran contenido del archivo a crear
-	 * @param Nombre
-	 *            del archivo
+	 * @param Bytes que seran contenido del archivo a crear
+	 * @param Nombre del archivo
 	 * @return
 	 */
 	private static void byte_to_file(byte[] file, String f_name)
@@ -294,8 +287,7 @@ public class c_rmifs
 	/**
 	 * Realiza el llamado a una funcion remota segun un comando dado
 	 * 
-	 * @param Nombre
-	 *            del comando
+	 * @param Nombre del comando
 	 * @return
 	 */
 	public static void ejecutar_comando(String cmd)

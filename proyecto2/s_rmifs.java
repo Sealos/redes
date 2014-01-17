@@ -19,8 +19,7 @@ public class s_rmifs
 	/**
 	 * Verifica si la opcion es alguna de las validas
 	 * 
-	 * @param Opcion
-	 *            del argumento de entrada
+	 * @param Opcion del argumento de entrada
 	 * @return Un indice que indica la opcion que se elegio o si fue un error
 	 */
 	private static int get_opt(String opt)
@@ -38,8 +37,7 @@ public class s_rmifs
 	/**
 	 * Verifica si el comando ingresado es valido
 	 * 
-	 * @param Nombre
-	 *            del comando
+	 * @param Nombre del comando
 	 * @return Un indice que indica la opcion que se elegio o si fue un error
 	 */
 	private static int get_cmd(String cmd)
@@ -55,8 +53,7 @@ public class s_rmifs
 	/**
 	 * Realiza el llamado de una funcion
 	 * 
-	 * @param Nombre
-	 *            del comando
+	 * @param Nombre del comando
 	 */
 	public void ejecutar_comando(String cmd)
 	{
@@ -83,12 +80,9 @@ public class s_rmifs
 	/**
 	 * Creacion del url del servidor remoto de archivos
 	 * 
-	 * @param Host
-	 *            donde se ejecuta el servidor de autenticacion
-	 * @param Puerto
-	 *            donde se ejecuta el servidor de autenticacion
-	 * @param Puerto
-	 *            de ejecucion del servidor de archivo
+	 * @param Host donde se ejecuta el servidor de autenticacion
+	 * @param Puerto donde se ejecuta el servidor de autenticacion
+	 * @param Puerto de ejecucion del servidor de archivo
 	 * @return
 	 */
 	public s_rmifs(String rmi_host, int rmi_port, int local_port)

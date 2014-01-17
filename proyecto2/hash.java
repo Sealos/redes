@@ -20,8 +20,7 @@ public class hash<E>
 	/**
 	 * Agrega <i>element</i> a la tabla usando la clase str.
 	 * 
-	 * @param Elemento
-	 *            de tipo E, con el que se declaro el objeto
+	 * @param Elemento de tipo E, con el que se declaro el objeto
 	 * @return true si el elemento fue insertado, false en caso contrario
 	 */
 	public boolean add(E e)
@@ -56,8 +55,7 @@ public class hash<E>
 	}
 
 	/**
-	 * Determina si el objeto <i>o</i> esta contenido en esta tabla. usando str
-	 * como clave {@code Object equals}
+	 * Determina si el objeto <i>o</i> esta contenido en esta tabla. usando str como clave {@code Object equals}
 	 * 
 	 * @see Object#equals
 	 */
@@ -98,8 +96,7 @@ public class hash<E>
 	/**
 	 * Obtiene el elemento de la tabla de hash
 	 * 
-	 * @return null si el elemento no esta en la tabla, en caso contrario
-	 *         devuelve el elemento
+	 * @return null si el elemento no esta en la tabla, en caso contrario devuelve el elemento
 	 */
 	public E getElem(E e)
 	{
@@ -132,8 +129,8 @@ public class hash<E>
 	}
 
 	/**
-	 * Duplica la tabla de hash cuando llega la cantidad de elementos es 75% a
-	 * el tamano de la tabla de hash para evitar colisiones
+	 * Duplica la tabla de hash cuando llega la cantidad de elementos es 75% a el tamano de la tabla de hash para evitar
+	 * colisiones
 	 */
 	@SuppressWarnings("unchecked")
 	private void rehash()

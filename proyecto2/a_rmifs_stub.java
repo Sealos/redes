@@ -11,8 +11,7 @@ public class a_rmifs_stub extends UnicastRemoteObject implements s_a_services
 	/**
 	 * Inicializacion del servidor de autenticacion
 	 * 
-	 * @param Direccion
-	 *            del archivo con las tuplas de usuario:clave validos
+	 * @param Direccion del archivo con las tuplas de usuario:clave validos
 	 * @return
 	 */
 	public a_rmifs_stub(String f_users) throws RemoteException
@@ -60,10 +59,8 @@ public class a_rmifs_stub extends UnicastRemoteObject implements s_a_services
 	/**
 	 * Verifica si la tupla nombre:clave
 	 * 
-	 * @param Nombre
-	 *            a verificar
-	 * @param Clave
-	 *            a verificar
+	 * @param Nombre a verificar
+	 * @param Clave a verificar
 	 * @return Devuelve true si son iguales, false en caso contrario
 	 */
 	public boolean validate(String nombre, String clave) throws RemoteException

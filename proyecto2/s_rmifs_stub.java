@@ -80,12 +80,9 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 		/**
 		 * Constructor de la clase archivo
 		 * 
-		 * @param Nombre
-		 *            del archivo
-		 * @param Nombre
-		 *            del propietario del archivo
-		 * @param Bytes
-		 *            del contenido del archivo
+		 * @param Nombre del archivo
+		 * @param Nombre del propietario del archivo
+		 * @param Bytes del contenido del archivo
 		 * @return
 		 */
 		archivo(String f_name, String owner, byte[] file)
@@ -99,8 +96,7 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 		/**
 		 * Constructor de la clase archivo
 		 * 
-		 * @param Nombre
-		 *            del archivo
+		 * @param Nombre del archivo
 		 * @return
 		 */
 		archivo(String f_name)
@@ -121,8 +117,7 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 		}
 
 		/**
-		 * Borra el archivo del directorio y el archivo que indica su
-		 * propietario
+		 * Borra el archivo del directorio y el archivo que indica su propietario
 		 * 
 		 * @return
 		 */
@@ -135,13 +130,10 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 		}
 
 		/**
-		 * Toma una cadena de bytes y se usa para crear un archivo con esos
-		 * datos
+		 * Toma una cadena de bytes y se usa para crear un archivo con esos datos
 		 * 
-		 * @param Bytes
-		 *            que seran contenido del archivo a crear
-		 * @param Nombre
-		 *            del archivo
+		 * @param Bytes que seran contenido del archivo a crear
+		 * @param Nombre del archivo
 		 * @return
 		 */
 		private void byte_to_file(byte[] file, String f_name)
@@ -165,13 +157,10 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 		}
 
 		/**
-		 * Dado un nombre de archivo crea un archivo .own con el nombre del
-		 * propietario del archivo
+		 * Dado un nombre de archivo crea un archivo .own con el nombre del propietario del archivo
 		 * 
-		 * @param Nombre
-		 *            del propietario
-		 * @param Nombre
-		 *            del archivo
+		 * @param Nombre del propietario
+		 * @param Nombre del archivo
 		 * @return
 		 */
 		private void write_ownership(String owner, String f_name)
@@ -198,8 +187,7 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 		/**
 		 * El contenido de un archivo se devuelven como una cadena de bytes
 		 * 
-		 * @param Nombre
-		 *            del archivo
+		 * @param Nombre del archivo
 		 * @return La cadena de bytes que representan el contenido del archivo
 		 */
 		private byte[] file_to_byte(String f_name)
@@ -237,8 +225,7 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 		/**
 		 * Devuelve el nombre del propietario del archivo
 		 * 
-		 * @param Nombre
-		 *            del archivo
+		 * @param Nombre del archivo
 		 * @return El nombre del propietario
 		 */
 		private String get_ownership(String f_name)
@@ -278,10 +265,8 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 	/**
 	 * Inicializacion del servidor de archivos
 	 * 
-	 * @param Host
-	 *            del servidor de autenticacion
-	 * @param Puerto
-	 *            del servidor de autenticacion
+	 * @param Host del servidor de autenticacion
+	 * @param Puerto del servidor de autenticacion
 	 * @return
 	 */
 	public s_rmifs_stub(String rmi_host, int rmi_port) throws RemoteException
@@ -332,12 +317,9 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 	/**
 	 * Realiza el inicio de sesion del cliente
 	 * 
-	 * @param Nombre
-	 *            del cliente
-	 * @param Clave
-	 *            del cliente
-	 * @return Devuelve true si la sesion se inicio con exito, false en caso
-	 *         contrario
+	 * @param Nombre del cliente
+	 * @param Clave del cliente
+	 * @return Devuelve true si la sesion se inicio con exito, false en caso contrario
 	 */
 	public boolean init(String nombre, String clave) throws RemoteException
 	{
@@ -353,13 +335,10 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 	/**
 	 * Realiza el cierre de sesion del cliente
 	 * 
-	 * @param Nombre
-	 *            del cliente
-	 * @param Clave
-	 *            del cliente
-	 * @return Devuelve un string que indica si realizo el cierre de sesion en
-	 *         caso contrario se le indica el motivo del porque no se concreto
-	 *         el cierre
+	 * @param Nombre del cliente
+	 * @param Clave del cliente
+	 * @return Devuelve un string que indica si realizo el cierre de sesion en caso contrario se le indica el motivo del
+	 *         porque no se concreto el cierre
 	 */
 	public String close(String nombre, String clave) throws RemoteException
 	{
@@ -375,12 +354,10 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 	/**
 	 * Muestra los archivos en el directorio del servidor
 	 * 
-	 * @param Nombre
-	 *            del cliente
-	 * @param Clave
-	 *            del cliente
-	 * @return Devuelve los nombres de los archivos en caso de exito en caso
-	 *         contrario se indica el motivo del porque no se concreto la accion
+	 * @param Nombre del cliente
+	 * @param Clave del cliente
+	 * @return Devuelve los nombres de los archivos en caso de exito en caso contrario se indica el motivo del porque no
+	 *         se concreto la accion
 	 */
 	public String rls(String nombre, String clave) throws RemoteException
 	{
@@ -396,14 +373,10 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 	/**
 	 * Sube un archivo del cliente al servidor
 	 * 
-	 * @param Nombre
-	 *            del cliente
-	 * @param Clave
-	 *            del cliente
-	 * @param Cadena
-	 *            de bytes con la informacion del archivo
-	 * @param Nombre
-	 *            del archivo a subir
+	 * @param Nombre del cliente
+	 * @param Clave del cliente
+	 * @param Cadena de bytes con la informacion del archivo
+	 * @param Nombre del archivo a subir
 	 * @return Devuelve un mensaje indicando lo ocurrido con esta accion
 	 */
 	public String sub(String nombre, String clave, byte[] file, String f_name) throws RemoteException
@@ -431,14 +404,10 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 	/**
 	 * Baja un archivo del servidor
 	 * 
-	 * @param Nombre
-	 *            del cliente
-	 * @param Clave
-	 *            del cliente
-	 * @param Nombre
-	 *            del archivo a bajar
-	 * @return En caso de exito devuelve los bytes con la informacion del
-	 *         archivo, caso contrario devuelve null
+	 * @param Nombre del cliente
+	 * @param Clave del cliente
+	 * @param Nombre del archivo a bajar
+	 * @return En caso de exito devuelve los bytes con la informacion del archivo, caso contrario devuelve null
 	 */
 	public byte[] baj(String nombre, String clave, String f_name) throws RemoteException
 	{
@@ -455,12 +424,9 @@ public class s_rmifs_stub extends UnicastRemoteObject implements c_s_services
 	/**
 	 * Borra un archivo del servidor
 	 * 
-	 * @param Nombre
-	 *            del cliente
-	 * @param Clave
-	 *            del cliente
-	 * @param Nombre
-	 *            del archivo
+	 * @param Nombre del cliente
+	 * @param Clave del cliente
+	 * @param Nombre del archivo
 	 * @return Devuelve un mensaje indicando lo ocurrido con esta accion
 	 */
 	public String bor(String nombre, String clave, String f_name) throws RemoteException
